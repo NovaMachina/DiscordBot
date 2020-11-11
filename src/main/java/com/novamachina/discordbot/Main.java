@@ -28,8 +28,14 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        if(!BotConfig.loadConfig()) {
+            BotConfig.generateConfig();
+            System.out.println("Missing configuration file. Generating...");
+            System.exit(0);
+        }
+
         GatewayDiscordClient client = DiscordClientBuilder
-            .create("NzczMDg1NzA4MzM1MTg1OTQx.X6EGLA.QZ6s8GD7JnkijvUekm0zwPalxrQ").build().login().block();
+            .create(BotConfig.getInstance().getToken()).build().login().block();
 
         client.getEventDispatcher().on(ReadyEvent.class).subscribe(event -> {
             User self = event.getSelf();

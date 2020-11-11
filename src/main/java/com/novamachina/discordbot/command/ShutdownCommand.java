@@ -1,5 +1,6 @@
 package com.novamachina.discordbot.command;
 
+import com.novamachina.discordbot.BotConfig;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.User;
 
@@ -7,7 +8,8 @@ public class ShutdownCommand implements ICommand {
     @Override
     public void execute(MessageCreateEvent event) {
         User user = event.getMessage().getAuthor().get();
-        if(user.getUsername().equals("NovaMachina") && user.getDiscriminator().equals("0039")) {
+        String userString = user.getUsername() + "#" + user.getDiscriminator();
+        if(BotConfig.getInstance().getAuthorizedUsers().contains(userString)) {
             event.getMessage().getChannel().block().createMessage("Shutting down...").block();
             System.exit(0);
         } else {
